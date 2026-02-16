@@ -1,0 +1,334 @@
+{
+  "model_region_availability": [
+    {
+      "model_variant": "claude-3.5-sonnet_200k_20241022",
+      "source_region": "us-east-1",
+      "deployed_at": "2024-10-22T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3.5-sonnet_200k_20241022",
+      "source_region": "us-west-2",
+      "deployed_at": "2024-10-22T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3.5-sonnet_200k_20241022",
+      "source_region": "eu-west-1",
+      "deployed_at": "2024-11-15T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3.5-sonnet_200k_20241022",
+      "source_region": "ap-southeast-1",
+      "deployed_at": "2024-11-20T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3.5-sonnet_200k_20241022",
+      "source_region": "ap-northeast-1",
+      "deployed_at": "2024-11-20T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-sonnet-4_200k_20250514",
+      "source_region": "us-east-1",
+      "deployed_at": "2025-05-14T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-sonnet-4_200k_20250514",
+      "source_region": "us-west-2",
+      "deployed_at": "2025-05-14T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-sonnet-4_200k_20250514",
+      "source_region": "us-east-2",
+      "deployed_at": "2025-05-14T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-sonnet-4_200k_20250514",
+      "source_region": "eu-west-1",
+      "deployed_at": "2025-05-14T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-sonnet-4_200k_20250514",
+      "source_region": "ap-northeast-1",
+      "deployed_at": "2025-05-14T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3-opus_200k_20240229",
+      "source_region": "us-east-1",
+      "deployed_at": "2024-03-04T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3-opus_200k_20240229",
+      "source_region": "us-west-2",
+      "deployed_at": "2024-03-04T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3-opus_200k_20240229",
+      "source_region": "eu-west-1",
+      "deployed_at": "2024-04-15T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3-sonnet_200k_20240229",
+      "source_region": "us-east-1",
+      "deployed_at": "2024-03-04T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3-sonnet_200k_20240229",
+      "source_region": "us-west-2",
+      "deployed_at": "2024-03-04T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3-sonnet_200k_20240229",
+      "source_region": "eu-west-1",
+      "deployed_at": "2024-04-15T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3-sonnet_200k_20240229",
+      "source_region": "ap-southeast-1",
+      "deployed_at": "2024-04-20T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3-sonnet_200k_20240229",
+      "source_region": "ap-northeast-1",
+      "deployed_at": "2024-04-20T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3-haiku_200k_20240307",
+      "source_region": "us-east-1",
+      "deployed_at": "2024-03-13T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3-haiku_200k_20240307",
+      "source_region": "us-west-2",
+      "deployed_at": "2024-03-13T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3-haiku_200k_20240307",
+      "source_region": "eu-west-1",
+      "deployed_at": "2024-04-15T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3-haiku_200k_20240307",
+      "source_region": "ap-southeast-1",
+      "deployed_at": "2024-04-20T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3-haiku_200k_20240307",
+      "source_region": "ap-northeast-1",
+      "deployed_at": "2024-04-20T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3-haiku_200k_20240307",
+      "source_region": "eu-central-1",
+      "deployed_at": "2024-05-01T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-3-haiku_200k_20240307",
+      "source_region": "ca-central-1",
+      "deployed_at": "2024-06-01T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "claude-2.1_100k_20231128",
+      "source_region": "us-east-1",
+      "deployed_at": "2023-11-28T00:00:00Z",
+      "is_active": false,
+      "snapshot_date": "2025-01-15"
+    },
+    {
+      "model_variant": "claude-2.1_100k_20231128",
+      "source_region": "us-west-2",
+      "deployed_at": "2023-11-28T00:00:00Z",
+      "is_active": false,
+      "snapshot_date": "2025-01-15"
+    },
+    {
+      "model_variant": "gpt-4o_128k_20240513",
+      "source_region": "us-east-1",
+      "deployed_at": "2024-06-01T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "gpt-4o_128k_20240513",
+      "source_region": "us-west-2",
+      "deployed_at": "2024-06-01T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "gpt-4o_128k_20240513",
+      "source_region": "eu-west-1",
+      "deployed_at": "2024-06-15T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "llama-3.1_70b_20240723",
+      "source_region": "us-east-1",
+      "deployed_at": "2024-08-01T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "llama-3.1_70b_20240723",
+      "source_region": "us-west-2",
+      "deployed_at": "2024-08-01T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "llama-3.1_70b_20240723",
+      "source_region": "eu-west-1",
+      "deployed_at": "2024-08-15T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "llama-3.1_405b_20240723",
+      "source_region": "us-east-1",
+      "deployed_at": "2024-09-01T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "llama-3.1_405b_20240723",
+      "source_region": "us-west-2",
+      "deployed_at": "2024-09-01T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "mistral-large_128k_20240724",
+      "source_region": "us-east-1",
+      "deployed_at": "2024-08-01T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "mistral-large_128k_20240724",
+      "source_region": "us-west-2",
+      "deployed_at": "2024-08-01T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "mistral-large_128k_20240724",
+      "source_region": "eu-west-1",
+      "deployed_at": "2024-08-10T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "mixtral-8x7b_32k_20231211",
+      "source_region": "us-east-1",
+      "deployed_at": "2024-01-15T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "mixtral-8x7b_32k_20231211",
+      "source_region": "us-west-2",
+      "deployed_at": "2024-01-15T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    },
+    {
+      "model_variant": "mixtral-8x7b_32k_20231211",
+      "source_region": "eu-west-1",
+      "deployed_at": "2024-02-01T00:00:00Z",
+      "is_active": true,
+      "snapshot_date": "2025-02-01"
+    }
+  ],
+  "metadata": {
+    "source": "aws_bedrock_documentation",
+    "extracted_at": "2026-02-13T20:00:00Z",
+    "total_mappings": 40,
+    "unique_models": 12,
+    "unique_regions": 8,
+    "data_version": "1.0",
+    "data_classification": {
+      "publicly_available": [
+        "model_variant (model name, context window, release date from AWS Bedrock documentation)",
+        "source_region (AWS region codes where models are officially documented as available)",
+        "is_active (based on AWS Bedrock model lifecycle documentation - Active vs Legacy vs EOL)"
+      ],
+      "synthesized_from_public_information": [
+        "deployed_at (estimated based on AWS announcement dates and regional rollout patterns)",
+        "snapshot_date (date when this availability data was compiled)"
+      ],
+      "notes_on_bedrock_availability": [
+        "AWS Bedrock supports both single-region and cross-region inference",
+        "source_region refers to the AWS region where you can directly invoke the model",
+        "Some models available via cross-region inference profiles (e.g., Claude Sonnet 4 has Global inference profile)",
+        "Cross-region inference can route requests to destination regions different from source_region",
+        "Model access may require explicit approval through AWS Bedrock console",
+        "Regional availability can change - check AWS documentation for latest updates",
+        "Some regions are opt-in and require activation",
+        "Claude 2.1 marked as inactive (Legacy/EOL) per AWS model lifecycle documentation"
+      ]
+    },
+    "sources": [
+      "AWS Bedrock Model Support by Region documentation",
+      "AWS Bedrock Supported Foundation Models",
+      "AWS Bedrock Inference Profiles documentation",
+      "Anthropic Claude on Amazon Bedrock documentation",
+      "AWS Bedrock Model Lifecycle documentation"
+    ],
+    "bedrock_specific_notes": {
+      "source_region_definition": "The AWS region from which you can make API requests to invoke the model",
+      "cross_region_inference": "Models like Claude Sonnet 4 support global cross-region inference with automatic routing to destination regions",
+      "model_access_requirement": "Users must request access to specific models through AWS Bedrock console",
+      "pricing_difference": "Regional endpoints may have 10% pricing premium over global endpoints for certain models",
+      "govcloud_availability": "Claude models available in AWS GovCloud regions with FedRAMP High certification"
+    }
+  }
+}

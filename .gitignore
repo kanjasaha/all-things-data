@@ -1,0 +1,58 @@
+# Modern Data Stack - Git Ignore File
+
+# Environment variables (NEVER COMMIT PASSWORDS!)
+.env
+*.env
+!.env.example
+
+# Docker volumes and data
+postgres-data/
+pgadmin-data/
+metabase-data/
+
+# Airflow
+airflow/logs/*
+!airflow/logs/.gitkeep
+airflow/__pycache__/
+airflow/*.pyc
+airflow/*.log
+
+# dbt
+dbt/logs/
+dbt/target/
+dbt/dbt_packages/
+dbt/resource_utilization/target/
+dbt/resource_utilization/dbt_packages/
+dbt/resource_utilization/logs/
+
+# Jupyter
+jupyter-notebooks/.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Database backups
+*.sql
+*.dump
+backup-*.sql.gz
+!init-db.sql
+
+# Secrets
+*.pem
+*.key
+secrets/
+
+# OS
+Thumbs.db

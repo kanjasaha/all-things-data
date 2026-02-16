@@ -1,0 +1,12 @@
+resource_utilization:
+  outputs:
+    dev:
+      type: postgres
+      host: postgres
+      port: 5432
+      user: postgres
+      password: postgres
+      dbname: resource_utilization
+      schema: staging_silver
+      threads: 4
+  target: dev

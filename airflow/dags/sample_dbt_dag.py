@@ -1,0 +1,71 @@
+"""
+Sample Airflow DAG using Astronomer Cosmos to orchestrate dbt models.
+
+This DAG demonstrates how to:
+1. Run dbt models using Cosmos
+2. Integrate dbt with Airflow for orchestration
+3. Monitor dbt model execution in Airflow UI
+"""
+
+from datetime import datetime, timedelta
+from pathlib import Path
+
+from airflow import DAG
+from cosmos import DbtDag, ProjectConfig, ProfileConfig, ExecutionConfig
+from cosmos.profiles import PostgresUserPasswordProfileMapping
+
+# Define paths
+DBT_PROJECT_PATH = Path("/opt/dbt/my_project")
+DBT_EXECUTABLE_PATH = "/usr/local/airflow/.local/bin/dbt"
+
+# PostgreSQL connection profile for dbt
+profile_config = ProfileConfig(
+    profile_name="default",
+    target_name="dev",
+    profile_mapping=PostgresUserPasswordProfileMapping(
+        conn_id="postgres_default",
+        profile_args={
+            "schema": "staging_silver",
+        },
+    ),
+)
+
+# dbt project configuration
+project_config = ProjectConfig(
+    dbt_project_path=DBT_PROJECT_PATH,
+)
+
+# Execution configuration
+execution_config = ExecutionConfig(
+    dbt_executable_path=DBT_EXECUTABLE_PATH,
+)
+
+# Create Cosmos DAG
+dbt_dag = DbtDag(
+    # Airflow DAG parameters
+    dag_id="dbt_resource_utilization",
+    start_date=datetime(2025, 2, 1),
+    schedule_interval="0 2 * * *",  # Run daily at 2 AM
+    catchup=False,
+    default_args={
+        "owner": "data_team",
+        "retries": 2,
+        "retry_delay": timedelta(minutes=5),
+    },
+    # Cosmos/dbt parameters
+    project_config=project_config,
+    profile_config=profile_config,
+    execution_config=execution_config,
+    # This will create tasks for each dbt model
+    operator_args={
+        "install_deps": True,  # Install dbt packages
+        "full_refresh": False,  # Don't full refresh by default
+    },
+)
+
+# Cosmos automatically creates tasks for:
+# - dbt deps (if install_deps=True)
+# - dbt seed
+# - dbt run (for each model)
+# - dbt test (if enabled)
+# - Task dependencies based on dbt model dependencies

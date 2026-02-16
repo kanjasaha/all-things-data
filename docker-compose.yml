@@ -1,0 +1,375 @@
+version: '3.8'
+
+# Modern Data Stack - All-in-One Environment
+# Components: PostgreSQL, Airflow, dbt, Airbyte, Metabase, JupyterLab, pgAdmin
+
+services:
+  # PostgreSQL 14 - Primary Database
+  postgres:
+    image: postgres:13
+    container_name: postgres14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: resource_utilization
+    command: postgres -c hba_file=/etc/postgresql/pg_hba.conf
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
+    networks:
+      - data-stack-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # pgAdmin - PostgreSQL Admin Interface
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - data-stack-network
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  # Apache Airflow - Workflow Orchestration
+  # Note: Using custom Airflow image with Astronomer Cosmos for dbt integration
+  airflow-init:
+    build:
+      context: ./airflow
+      dockerfile: Dockerfile
+    container_name: airflow-init
+    environment:
+      AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres/airflow
+      AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://postgres:postgres@postgres/airflow
+      AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0
+      AIRFLOW__CORE__FERNET_KEY: ''
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth'
+      _AIRFLOW_DB_UPGRADE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: airflow
+      _AIRFLOW_WWW_USER_PASSWORD: airflow
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./dbt:/opt/dbt
+    networks:
+      - data-stack-network
+    depends_on:
+      - postgres
+      - redis
+    command: version
+
+  airflow-webserver:
+    build:
+      context: ./airflow
+      dockerfile: Dockerfile
+    container_name: airflow-webserver
+    environment:
+      AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres/airflow
+      AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://postgres:postgres@postgres/airflow
+      AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0
+      AIRFLOW__CORE__FERNET_KEY: ''
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth'
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./dbt:/opt/dbt
+    networks:
+      - data-stack-network
+    depends_on:
+      - airflow-init
+      - postgres
+      - redis
+    command: webserver
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  airflow-scheduler:
+    build:
+      context: ./airflow
+      dockerfile: Dockerfile
+    container_name: airflow-scheduler
+    environment:
+      AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres/airflow
+      AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://postgres:postgres@postgres/airflow
+      AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0
+      AIRFLOW__CORE__FERNET_KEY: ''
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./dbt:/opt/dbt
+    networks:
+      - data-stack-network
+    depends_on:
+      - airflow-init
+      - postgres
+      - redis
+    command: scheduler
+    healthcheck:
+      test: ["CMD-SHELL", "airflow jobs check --job-type SchedulerJob --hostname \"$${HOSTNAME}\""]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  airflow-worker:
+    build:
+      context: ./airflow
+      dockerfile: Dockerfile
+    container_name: airflow-worker
+    environment:
+      AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres/airflow
+      AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://postgres:postgres@postgres/airflow
+      AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0
+      AIRFLOW__CORE__FERNET_KEY: ''
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+    networks:
+      - data-stack-network
+    depends_on:
+      - airflow-init
+      - postgres
+      - redis
+    command: celery worker
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - 'celery --app airflow.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}"'
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # Redis - Message Broker for Airflow
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - data-stack-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Metabase - Business Intelligence
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    ports:
+      - "3000:3000"
+    volumes:
+      - metabase-data:/metabase-data
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: metabase
+      MB_DB_PORT: 5432
+      MB_DB_USER: postgres
+      MB_DB_PASS: postgres
+      MB_DB_HOST: postgres
+    networks:
+      - data-stack-network
+    depends_on:
+      - postgres
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # JupyterLab - Data Science Notebook
+  jupyterlab:
+    image: jupyter/datascience-notebook:latest
+    container_name: jupyterlab
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./jupyter-notebooks:/home/jovyan/work
+    environment:
+      JUPYTER_ENABLE_LAB: "yes"
+      GRANT_SUDO: "yes"
+    networks:
+      - data-stack-network
+    user: root
+    command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''
+    restart: unless-stopped
+
+  # dbt - Data Transformation (as a service for running dbt commands)
+  dbt:
+    build:
+      context: ./dbt
+      dockerfile: Dockerfile
+    container_name: dbt
+    volumes:
+      - ./dbt:/usr/app
+      - ~/.dbt:/root/.dbt
+    networks:
+      - data-stack-network
+    depends_on:
+      - postgres
+    # This is a utility container - no persistent service
+    # Use: docker-compose run dbt <command>
+    profiles:
+      - dbt-service
+
+  # Airbyte - Data Integration Platform
+  # Based on Airbyte's official docker-compose
+  airbyte-db:
+    image: postgres:13-alpine
+    container_name: airbyte-db
+    environment:
+      POSTGRES_USER: airbyte
+      POSTGRES_PASSWORD: airbyte
+      POSTGRES_DB: airbyte
+    volumes:
+      - airbyte-db-data:/var/lib/postgresql/data
+    networks:
+      - data-stack-network
+    restart: unless-stopped
+
+  airbyte-server:
+    image: airbyte/server:0.50.33
+    container_name: airbyte-server
+    environment:
+      DATABASE_USER: airbyte
+      DATABASE_PASSWORD: airbyte
+      DATABASE_HOST: airbyte-db
+      DATABASE_PORT: 5432
+      DATABASE_DB: airbyte
+      WORKSPACE_ROOT: /tmp/workspace
+      CONFIG_ROOT: /data
+      TRACKING_STRATEGY: segment
+      AIRBYTE_VERSION: 0.50.33
+      AIRBYTE_ROLE: ${AIRBYTE_ROLE:-}
+      TEMPORAL_HOST: airbyte-temporal:7233
+    ports:
+      - "8000:8001"
+    volumes:
+      - airbyte-workspace:/tmp/workspace
+      - airbyte-data:/data
+      - airbyte-config:/config
+    networks:
+      - data-stack-network
+    depends_on:
+      - airbyte-db
+      - airbyte-temporal
+    restart: unless-stopped
+
+  airbyte-webapp:
+    image: airbyte/webapp:0.50.33
+    container_name: airbyte-webapp
+    environment:
+      AIRBYTE_VERSION: 0.50.33
+      API_URL: /api/v1/
+      TRACKING_STRATEGY: segment
+    networks:
+      - data-stack-network
+    depends_on:
+      - airbyte-server
+    restart: unless-stopped
+
+  airbyte-temporal:
+    image: temporalio/auto-setup:1.13.0
+    container_name: airbyte-temporal
+    environment:
+      DB: postgresql
+      DB_PORT: 5432
+      POSTGRES_USER: airbyte
+      POSTGRES_PWD: airbyte
+      POSTGRES_SEEDS: airbyte-db
+      DYNAMIC_CONFIG_FILE_PATH: config/dynamicconfig/development.yaml
+    volumes:
+      - ./airbyte/temporal:/etc/temporal/config/dynamicconfig
+    networks:
+      - data-stack-network
+    depends_on:
+      - airbyte-db
+    restart: unless-stopped
+
+  airbyte-worker:
+    image: airbyte/worker:0.50.33
+    container_name: airbyte-worker
+    environment:
+      AIRBYTE_VERSION: 0.50.33
+      DATABASE_USER: airbyte
+      DATABASE_PASSWORD: airbyte
+      DATABASE_HOST: airbyte-db
+      DATABASE_PORT: 5432
+      DATABASE_DB: airbyte
+      WORKSPACE_ROOT: /tmp/workspace
+      CONFIG_ROOT: /data
+      TEMPORAL_HOST: airbyte-temporal:7233
+      TRACKING_STRATEGY: segment
+      WORKER_ENVIRONMENT: docker
+      LOG_LEVEL: INFO
+    volumes:
+      - airbyte-workspace:/tmp/workspace
+      - airbyte-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - data-stack-network
+    depends_on:
+      - airbyte-server
+      - airbyte-temporal
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+    driver: local
+  pgadmin-data:
+    driver: local
+  metabase-data:
+    driver: local
+  airbyte-db-data:
+    driver: local
+  airbyte-workspace:
+    driver: local
+  airbyte-data:
+    driver: local
+  airbyte-config:
+    driver: local
+
+networks:
+  data-stack-network:
+    driver: bridge
