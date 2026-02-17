@@ -32,6 +32,8 @@ jobs:
     name: Integration Test
     runs-on: ubuntu-latest
     needs: build
+    env:
+      PGPASSWORD: postgres
     steps:
       - uses: actions/checkout@v3
       - name: Start PostgreSQL
@@ -42,8 +44,8 @@ jobs:
         run: docker compose exec -T postgres pg_isready -U postgres
       - name: Verify databases
         run: |
-          docker compose exec -T postgres psql -U postgres -lqt | grep -q airflow
-          docker compose exec -T postgres psql -U postgres -lqt | grep -q metabase
+          docker compose exec -T -e PGPASSWORD=postgres postgres psql -U postgres -lqt | grep -q airflow
+          docker compose exec -T -e PGPASSWORD=postgres postgres psql -U postgres -lqt | grep -q metabase
       - name: Cleanup
         if: always()
         run: docker compose down -v
