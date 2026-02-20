@@ -46,3 +46,10 @@ sources:
             description: "On-Demand Capacity Reservation ID"
           - name: loaded_at
             description: "Timestamp when record was loaded into bronze"
+      - name: resource_model_instance_allocation
+        description: "Daily instance allocation per model variant and region"
+        columns:
+          - name: model_variant
+            description: "Model variant identifier"
+          - name: loaded_at
+            description: "Timestamp when record was loaded into bronze"
