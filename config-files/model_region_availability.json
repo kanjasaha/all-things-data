@@ -5,287 +5,369 @@
       "source_region": "us-east-1",
       "deployed_at": "2024-10-22T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1"
     },
     {
       "model_variant": "claude-3.5-sonnet_200k_20241022",
       "source_region": "us-west-2",
       "deployed_at": "2024-10-22T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1"
     },
     {
       "model_variant": "claude-3.5-sonnet_200k_20241022",
       "source_region": "eu-west-1",
       "deployed_at": "2024-11-15T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1"
     },
     {
       "model_variant": "claude-3.5-sonnet_200k_20241022",
       "source_region": "ap-southeast-1",
       "deployed_at": "2024-11-20T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1"
     },
     {
       "model_variant": "claude-3.5-sonnet_200k_20241022",
       "source_region": "ap-northeast-1",
       "deployed_at": "2024-11-20T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1"
     },
     {
       "model_variant": "claude-sonnet-4_200k_20250514",
       "source_region": "us-east-1",
       "deployed_at": "2025-05-14T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "GLOBAL",
+      "inference_region": "us-east-1,us-west-2,us-east-2,eu-west-1,ap-northeast-1"
     },
     {
       "model_variant": "claude-sonnet-4_200k_20250514",
       "source_region": "us-west-2",
       "deployed_at": "2025-05-14T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "GLOBAL",
+      "inference_region": "us-east-1,us-west-2,us-east-2,eu-west-1,ap-northeast-1"
     },
     {
       "model_variant": "claude-sonnet-4_200k_20250514",
       "source_region": "us-east-2",
       "deployed_at": "2025-05-14T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "GLOBAL",
+      "inference_region": "us-east-1,us-west-2,us-east-2,eu-west-1,ap-northeast-1"
     },
     {
       "model_variant": "claude-sonnet-4_200k_20250514",
       "source_region": "eu-west-1",
       "deployed_at": "2025-05-14T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "GLOBAL",
+      "inference_region": "us-east-1,us-west-2,us-east-2,eu-west-1,ap-northeast-1"
     },
     {
       "model_variant": "claude-sonnet-4_200k_20250514",
       "source_region": "ap-northeast-1",
       "deployed_at": "2025-05-14T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "GLOBAL",
+      "inference_region": "us-east-1,us-west-2,us-east-2,eu-west-1,ap-northeast-1"
     },
     {
       "model_variant": "claude-3-opus_200k_20240229",
       "source_region": "us-east-1",
       "deployed_at": "2024-03-04T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1"
     },
     {
       "model_variant": "claude-3-opus_200k_20240229",
       "source_region": "us-west-2",
       "deployed_at": "2024-03-04T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1"
     },
     {
       "model_variant": "claude-3-opus_200k_20240229",
       "source_region": "eu-west-1",
       "deployed_at": "2024-04-15T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1"
     },
     {
       "model_variant": "claude-3-sonnet_200k_20240229",
       "source_region": "us-east-1",
       "deployed_at": "2024-03-04T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1"
     },
     {
       "model_variant": "claude-3-sonnet_200k_20240229",
       "source_region": "us-west-2",
       "deployed_at": "2024-03-04T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1"
     },
     {
       "model_variant": "claude-3-sonnet_200k_20240229",
       "source_region": "eu-west-1",
       "deployed_at": "2024-04-15T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1"
     },
     {
       "model_variant": "claude-3-sonnet_200k_20240229",
       "source_region": "ap-southeast-1",
       "deployed_at": "2024-04-20T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1"
     },
     {
       "model_variant": "claude-3-sonnet_200k_20240229",
       "source_region": "ap-northeast-1",
       "deployed_at": "2024-04-20T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1"
     },
     {
       "model_variant": "claude-3-haiku_200k_20240307",
       "source_region": "us-east-1",
       "deployed_at": "2024-03-13T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1,eu-central-1,ca-central-1"
     },
     {
       "model_variant": "claude-3-haiku_200k_20240307",
       "source_region": "us-west-2",
       "deployed_at": "2024-03-13T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1,eu-central-1,ca-central-1"
     },
     {
       "model_variant": "claude-3-haiku_200k_20240307",
       "source_region": "eu-west-1",
       "deployed_at": "2024-04-15T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1,eu-central-1,ca-central-1"
     },
     {
       "model_variant": "claude-3-haiku_200k_20240307",
       "source_region": "ap-southeast-1",
       "deployed_at": "2024-04-20T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1,eu-central-1,ca-central-1"
     },
     {
       "model_variant": "claude-3-haiku_200k_20240307",
       "source_region": "ap-northeast-1",
       "deployed_at": "2024-04-20T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1,eu-central-1,ca-central-1"
     },
     {
       "model_variant": "claude-3-haiku_200k_20240307",
       "source_region": "eu-central-1",
       "deployed_at": "2024-05-01T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1,eu-central-1,ca-central-1"
     },
     {
       "model_variant": "claude-3-haiku_200k_20240307",
       "source_region": "ca-central-1",
       "deployed_at": "2024-06-01T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1,eu-central-1,ca-central-1"
     },
     {
       "model_variant": "claude-2.1_100k_20231128",
       "source_region": "us-east-1",
       "deployed_at": "2023-11-28T00:00:00Z",
       "is_active": false,
-      "snapshot_date": "2025-01-15"
+      "snapshot_date": "2025-01-15",
+      "routing_strategy": "LOCAL",
+      "inference_region": "us-east-1"
     },
     {
       "model_variant": "claude-2.1_100k_20231128",
       "source_region": "us-west-2",
       "deployed_at": "2023-11-28T00:00:00Z",
       "is_active": false,
-      "snapshot_date": "2025-01-15"
+      "snapshot_date": "2025-01-15",
+      "routing_strategy": "LOCAL",
+      "inference_region": "us-west-2"
     },
     {
       "model_variant": "gpt-4o_128k_20240513",
       "source_region": "us-east-1",
       "deployed_at": "2024-06-01T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1"
     },
     {
       "model_variant": "gpt-4o_128k_20240513",
       "source_region": "us-west-2",
       "deployed_at": "2024-06-01T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1"
     },
     {
       "model_variant": "gpt-4o_128k_20240513",
       "source_region": "eu-west-1",
       "deployed_at": "2024-06-15T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1"
     },
     {
       "model_variant": "llama-3.1_70b_20240723",
       "source_region": "us-east-1",
       "deployed_at": "2024-08-01T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1"
     },
     {
       "model_variant": "llama-3.1_70b_20240723",
       "source_region": "us-west-2",
       "deployed_at": "2024-08-01T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1"
     },
     {
       "model_variant": "llama-3.1_70b_20240723",
       "source_region": "eu-west-1",
       "deployed_at": "2024-08-15T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1"
     },
     {
       "model_variant": "llama-3.1_405b_20240723",
       "source_region": "us-east-1",
       "deployed_at": "2024-09-01T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2"
     },
     {
       "model_variant": "llama-3.1_405b_20240723",
       "source_region": "us-west-2",
       "deployed_at": "2024-09-01T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2"
     },
     {
       "model_variant": "mistral-large_128k_20240724",
       "source_region": "us-east-1",
       "deployed_at": "2024-08-01T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1"
     },
     {
       "model_variant": "mistral-large_128k_20240724",
       "source_region": "us-west-2",
       "deployed_at": "2024-08-01T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1"
     },
     {
       "model_variant": "mistral-large_128k_20240724",
       "source_region": "eu-west-1",
       "deployed_at": "2024-08-10T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1"
     },
     {
       "model_variant": "mixtral-8x7b_32k_20231211",
       "source_region": "us-east-1",
       "deployed_at": "2024-01-15T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1"
     },
     {
       "model_variant": "mixtral-8x7b_32k_20231211",
       "source_region": "us-west-2",
       "deployed_at": "2024-01-15T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1"
     },
     {
       "model_variant": "mixtral-8x7b_32k_20231211",
       "source_region": "eu-west-1",
       "deployed_at": "2024-02-01T00:00:00Z",
       "is_active": true,
-      "snapshot_date": "2025-02-01"
+      "snapshot_date": "2025-02-01",
+      "routing_strategy": "MULTI_REGION",
+      "inference_region": "us-east-1,us-west-2,eu-west-1"
     }
   ],
   "metadata": {

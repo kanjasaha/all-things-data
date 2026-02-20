@@ -1,0 +1,48 @@
+version: 2
+
+sources:
+  - name: raw_bronze
+    schema: raw_bronze
+    description: "Bronze layer — raw ingested data from source systems"
+    tables:
+      - name: customer_details
+        description: "Customer and account information from CRM systems"
+        columns:
+          - name: account_id
+            description: "Unique account identifier"
+          - name: company_id
+            description: "Parent company identifier"
+          - name: loaded_at
+            description: "Timestamp when record was loaded into bronze"
+
+      - name: inference_user_token_usage_open_source
+        description: "Token usage events for open source model inference"
+        columns:
+          - name: request_id
+            description: "Unique request identifier"
+          - name: loaded_at
+            description: "Timestamp when record was loaded into bronze"
+
+      - name: inference_user_token_usage_proprietary
+        description: "Token usage events for proprietary model inference"
+        columns:
+          - name: request_id
+            description: "Unique request identifier"
+          - name: loaded_at
+            description: "Timestamp when record was loaded into bronze"
+
+      - name: resource_model_utilization
+        description: "Pod-level utilization snapshots"
+        columns:
+          - name: pod_id
+            description: "Unique pod identifier"
+          - name: loaded_at
+            description: "Timestamp when record was loaded into bronze"
+
+      - name: resource_accelerator_inventory
+        description: "Daily accelerator inventory snapshots per ODCR"
+        columns:
+          - name: odcr
+            description: "On-Demand Capacity Reservation ID"
+          - name: loaded_at
+            description: "Timestamp when record was loaded into bronze"

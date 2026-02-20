@@ -69,7 +69,8 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-      - ./dbt:/opt/dbt
+      - ./dbt/resource_utilization/opt/dbt/my_project:ro
+      - ./config-files:/opt/airflow/config-files
     networks:
       - data-stack-network
     depends_on:
@@ -97,7 +98,8 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-      - ./dbt:/opt/dbt
+      - ./dbt/resource_utilization/opt/dbt/my_project:ro
+      - ./config-files:/opt/airflow/config-files
     networks:
       - data-stack-network
     depends_on:
@@ -129,7 +131,9 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-      - ./dbt:/opt/dbt
+      - ./dbt/resource_utilization/opt/dbt/my_project:ro
+      - ./config-files:/opt/airflow/config-files
+      
     networks:
       - data-stack-network
     depends_on:
@@ -157,17 +161,19 @@ services:
       AIRFLOW__CORE__FERNET_KEY: ''
       AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
       AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      GUNICORN_CMD_ARGS: "--timeout 120"
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
+      - ./config-files:/opt/airflow/config-files    
     networks:
       - data-stack-network
     depends_on:
       - airflow-init
       - postgres
       - redis
-    command: celery worker
+    command: bash -c "rm -f /opt/airflow/airflow-worker.pid && airflow celery worker"
     healthcheck:
       test:
         - "CMD-SHELL"

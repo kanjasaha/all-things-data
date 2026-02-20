@@ -1,0 +1,100 @@
+version: 2
+
+models:
+  - name: stg_customer_details
+    description: "Cleaned and standardised customer account data from CRM"
+    columns:
+      - name: account_id
+        description: "Unique account identifier"
+        tests:
+          - unique
+          - not_null
+      - name: company_id
+        tests:
+          - not_null
+      - name: is_active
+        tests:
+          - not_null
+      - name: loaded_at
+        tests:
+          - not_null
+
+  - name: stg_token_usage_open_source
+    description: "Cleaned token usage events for open source models with derived fields"
+    columns:
+      - name: request_id
+        description: "Unique request identifier"
+        tests:
+          - unique
+          - not_null
+      - name: account_id
+        tests:
+          - not_null
+      - name: model_type
+        tests:
+          - accepted_values:
+              values: ['open_source']
+      - name: total_token
+        tests:
+          - not_null
+      - name: loaded_at
+        tests:
+          - not_null
+
+  - name: stg_token_usage_proprietary
+    description: "Cleaned token usage events for proprietary models with derived fields"
+    columns:
+      - name: request_id
+        description: "Unique request identifier"
+        tests:
+          - unique
+          - not_null
+      - name: account_id
+        tests:
+          - not_null
+      - name: model_type
+        tests:
+          - accepted_values:
+              values: ['proprietary']
+      - name: total_token
+        tests:
+          - not_null
+      - name: loaded_at
+        tests:
+          - not_null
+
+  - name: stg_model_utilization
+    description: "Pod-level utilization snapshots with utilisation bands and derived metrics"
+    columns:
+      - name: pod_id
+        tests:
+          - not_null
+      - name: event_timestamp
+        tests:
+          - not_null
+      - name: util_ratio
+        tests:
+          - not_null
+      - name: util_band
+        tests:
+          - accepted_values:
+              values: ['low', 'medium', 'high', 'critical']
+      - name: loaded_at
+        tests:
+          - not_null
+
+  - name: stg_accelerator_inventory
+    description: "Daily accelerator inventory snapshots with utilisation and allocation metrics"
+    columns:
+      - name: odcr
+        tests:
+          - not_null
+      - name: event_timestamp
+        tests:
+          - not_null
+      - name: used_pct
+        tests:
+          - not_null
+      - name: loaded_at
+        tests:
+          - not_null
