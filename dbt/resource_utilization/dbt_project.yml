@@ -1,17 +1,10 @@
-
-# Name your project! Project names should contain only lowercase characters
-# and underscores. A good package name should reflect your organization's
-# name or the intended use of these models
 name: 'resource_utilization'
 version: '1.0.0'
 config-version: 2
 
-# This setting configures which "profile" dbt uses for this project.
 profile: 'resource_utilization'
 
-# These configurations specify where dbt should look for different types of files.
-# The `model-paths` config, for example, states that models in this project can be
-# found in the "models/" directory. You probably won't need to change these!
+# File paths
 model-paths: ["models"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
@@ -19,20 +12,43 @@ seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
-target-path: "target"  # directory which will store compiled SQL files
-clean-targets:         # directories to be removed by `dbt clean`
+target-path: "target"
+clean-targets:
   - "target"
   - "dbt_packages"
 
+# =============================================================================
+# Model configurations
+# =============================================================================
+# Schema naming follows dbt standard convention:
+#   base schema (profiles.yml) + folder name = final schema
+#
+#   dev:  dbt_dev  + staging_silver → dbt_dev_staging_silver
+#         dbt_dev  + intermediate_silver → dbt_dev_intermediate_silver
+#         dbt_dev  + mart_gold           → dbt_dev_mart_gold
+#   seeds land in dbt_dev_staging_silver alongside staging views
+#
+#   prod: dbt_prod + staging_silver → dbt_prod_staging_silver
+#         dbt_prod + intermediate_silver → dbt_prod_intermediate_silver
+#         dbt_prod + mart_gold           → dbt_prod_mart_gold
+# =============================================================================
 
-# Configuring models
-# Full documentation: https://docs.getdbt.com/docs/configuring-models
-
-# In this example config, we tell dbt to build all models in the example/
-# directory as views. These settings can be overridden in the individual model
-# files using the `{{ config(...) }}` macro.
 models:
-  my_project:
-    # Config indicated by + and applies to all files under models/example/
-    example:
+  resource_utilization:
+
+    staging:
       +materialized: view
+      +schema: staging_silver
+
+    intermediate:
+      +materialized: table
+      +schema: intermediate_silver
+
+    marts:
+      +materialized: table
+      +schema: mart_gold
+
+seeds:
+  resource_utilization:
+    +schema: seeds
+    +quote_columns: false

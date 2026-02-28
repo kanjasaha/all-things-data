@@ -1,48 +1,38 @@
 version: 2
 
 models:
+
+  # ---------------------------------------------------------------------------
+  # Customer
+  # ---------------------------------------------------------------------------
   - name: stg_customer_details
-    description: "Cleaned and standardised customer account data from CRM"
+    description: "Cleaned and standardised customer account data from CRM. One row per account."
     columns:
-      - name: account_id
+      - name: customer_account_id
         description: "Unique account identifier"
         tests:
           - unique
           - not_null
-      - name: company_id
+      - name: customer_company_id
         tests:
           - not_null
-      - name: is_active
+      - name: customer_segment
         tests:
           - not_null
-      - name: loaded_at
-        tests:
-          - not_null
-
-  - name: stg_token_usage_open_source
-    description: "Cleaned token usage events for open source models with derived fields"
-    columns:
-      - name: request_id
-        description: "Unique request identifier"
-        tests:
-          - unique
-          - not_null
-      - name: account_id
-        tests:
-          - not_null
-      - name: model_type
-        tests:
           - accepted_values:
-              values: ['open_source']
-      - name: total_token
+              values: ['Strategic', 'Commercial', 'Unknown']
+      - name: is_active_customer
         tests:
           - not_null
       - name: loaded_at
         tests:
           - not_null
 
+  # ---------------------------------------------------------------------------
+  # Inference Usage
+  # ---------------------------------------------------------------------------
   - name: stg_token_usage_proprietary
-    description: "Cleaned token usage events for proprietary models with derived fields"
+    description: "Cleaned token usage events for proprietary models. One row per API request."
     columns:
       - name: request_id
         description: "Unique request identifier"
@@ -56,15 +46,52 @@ models:
         tests:
           - accepted_values:
               values: ['proprietary']
-      - name: total_token
+      - name: total_tokens
+        tests:
+          - not_null
+      - name: is_error
+        tests:
+          - not_null
+      - name: event_date
         tests:
           - not_null
       - name: loaded_at
         tests:
           - not_null
 
+  - name: stg_token_usage_open_source
+    description: "Cleaned token usage events for open source models. One row per API request."
+    columns:
+      - name: request_id
+        description: "Unique request identifier"
+        tests:
+          - unique
+          - not_null
+      - name: account_id
+        tests:
+          - not_null
+      - name: model_type
+        tests:
+          - accepted_values:
+              values: ['open_source']
+      - name: total_tokens
+        tests:
+          - not_null
+      - name: is_error
+        tests:
+          - not_null
+      - name: event_date
+        tests:
+          - not_null
+      - name: loaded_at
+        tests:
+          - not_null
+
+  # ---------------------------------------------------------------------------
+  # Resource & Infrastructure
+  # ---------------------------------------------------------------------------
   - name: stg_model_utilization
-    description: "Pod-level utilization snapshots with utilisation bands and derived metrics"
+    description: "Pod-level utilization snapshots with utilisation bands. One row per pod per timestamp."
     columns:
       - name: pod_id
         tests:
@@ -72,10 +99,10 @@ models:
       - name: event_timestamp
         tests:
           - not_null
-      - name: util_ratio
+      - name: utilisation_ratio
         tests:
           - not_null
-      - name: util_band
+      - name: utilisation_band
         tests:
           - accepted_values:
               values: ['low', 'medium', 'high', 'critical']
@@ -84,15 +111,206 @@ models:
           - not_null
 
   - name: stg_accelerator_inventory
-    description: "Daily accelerator inventory snapshots with utilisation and allocation metrics"
+    description: "Daily accelerator inventory snapshots with utilisation metrics. One row per ODCR per timestamp."
     columns:
-      - name: odcr
+      - name: capacity_reservation_id
         tests:
           - not_null
       - name: event_timestamp
         tests:
           - not_null
       - name: used_pct
+        tests:
+          - not_null
+      - name: loaded_at
+        tests:
+          - not_null
+
+  - name: stg_model_instance_allocation
+    description: "Instance allocation per model variant and region. One row per model + region + instance type per timestamp."
+    columns:
+      - name: model_variant
+        tests:
+          - not_null
+      - name: region
+        tests:
+          - not_null
+      - name: event_timestamp
+        tests:
+          - not_null
+      - name: used_pct
+        tests:
+          - not_null
+      - name: loaded_at
+        tests:
+          - not_null
+
+  # ---------------------------------------------------------------------------
+  # Model Configuration
+  # ---------------------------------------------------------------------------
+  - name: stg_config_model_dimensions
+    description: "Cleaned model configuration and capacity metrics. One row per model variant per snapshot date."
+    columns:
+      - name: model_variant
+        tests:
+          - not_null
+      - name: publisher_name
+        tests:
+          - not_null
+      - name: inference_scope
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['global', 'regional', 'multi-region']
+      - name: is_open_source
+        tests:
+          - not_null
+      - name: snapshot_date
+        tests:
+          - not_null
+      - name: loaded_at
+        tests:
+          - not_null
+
+  - name: stg_config_model_region_availability
+    description: "Model regional availability and deployment status. One row per model variant + region per snapshot date."
+    columns:
+      - name: model_variant
+        tests:
+          - not_null
+      - name: source_region
+        tests:
+          - not_null
+      - name: is_region_active
+        tests:
+          - not_null
+      - name: snapshot_date
+        tests:
+          - not_null
+      - name: loaded_at
+        tests:
+          - not_null
+
+  # ---------------------------------------------------------------------------
+  # Quota & Rate Limits
+  # ---------------------------------------------------------------------------
+  - name: stg_quota_default_rate_limits
+    description: "Default rate limits per model, inference scope, and region. One row per model + scope + region per snapshot date."
+    columns:
+      - name: model_variant
+        tests:
+          - not_null
+      - name: inference_scope
+        tests:
+          - not_null
+      - name: source_region
+        tests:
+          - not_null
+      - name: default_rpm
+        tests:
+          - not_null
+      - name: default_tpm
+        tests:
+          - not_null
+      - name: default_tpd
+        tests:
+          - not_null
+      - name: snapshot_date
+        tests:
+          - not_null
+      - name: loaded_at
+        tests:
+          - not_null
+
+  - name: stg_quota_customer_rate_limit_adjustments
+    description: "Per-customer rate limit adjustments. One row per account + model + scope + region per snapshot date."
+    columns:
+      - name: account_id
+        tests:
+          - not_null
+      - name: model_variant
+        tests:
+          - not_null
+      - name: inference_scope
+        tests:
+          - not_null
+      - name: source_region
+        tests:
+          - not_null
+      - name: adjusted_rpm
+        tests:
+          - not_null
+      - name: adjusted_tpm
+        tests:
+          - not_null
+      - name: adjusted_tpd
+        tests:
+          - not_null
+      - name: is_adjustment_active
+        tests:
+          - not_null
+      - name: snapshot_date
+        tests:
+          - not_null
+      - name: loaded_at
+        tests:
+          - not_null
+
+  # ---------------------------------------------------------------------------
+  # Revenue
+  # ---------------------------------------------------------------------------
+  - name: stg_revenue_account_daily
+    description: "Cleaned daily revenue at account + model + region grain. One row per account + product_sku + model + scope + region + billing_type + currency + date."
+    columns:
+      - name: account_id
+        tests:
+          - not_null
+      - name: product_sku
+        tests:
+          - not_null
+      - name: model_variant
+        tests:
+          - not_null
+      - name: total_gross_revenue
+        tests:
+          - not_null
+      - name: currency_code
+        tests:
+          - not_null
+      - name: billing_type
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['pay-as-you-go', 'savings-plan', 'committed-use']
+      - name: revenue_date
+        tests:
+          - not_null
+      - name: loaded_at
+        tests:
+          - not_null
+
+  
+  - name: stg_quota_customer_rate_limit_requests
+    description: "Cleaned customer rate limit requests. One row per request."
+    columns:
+      - name: account_id
+        tests:
+          - not_null
+      - name: request_status
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['pending', 'approved', 'rejected', 'cancelled']
+      - name: requested_rpm
+        tests:
+          - not_null
+      - name: requested_tpm
+        tests:
+          - not_null
+      - name: requested_tpd
+        tests:
+          - not_null
+      - name: request_created_at
         tests:
           - not_null
       - name: loaded_at

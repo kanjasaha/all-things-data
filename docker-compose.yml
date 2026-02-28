@@ -69,7 +69,7 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-      - ./dbt/resource_utilization/opt/dbt/my_project:ro
+      - ./dbt/resource_utilization:/opt/dbt/resource_utilization:ro
       - ./config-files:/opt/airflow/config-files
     networks:
       - data-stack-network
@@ -98,7 +98,7 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-      - ./dbt/resource_utilization/opt/dbt/my_project:ro
+      - ./dbt/resource_utilization:/opt/dbt/resource_utilization:ro
       - ./config-files:/opt/airflow/config-files
     networks:
       - data-stack-network
@@ -131,7 +131,7 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-      - ./dbt/resource_utilization/opt/dbt/my_project:ro
+      - ./dbt/resource_utilization:/opt/dbt/resource_utilization:ro
       - ./config-files:/opt/airflow/config-files
       
     networks:
@@ -166,7 +166,8 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-      - ./config-files:/opt/airflow/config-files    
+      - ./config-files:/opt/airflow/config-files 
+      - ./dbt/resource_utilization:/opt/dbt/resource_utilization 
     networks:
       - data-stack-network
     depends_on:

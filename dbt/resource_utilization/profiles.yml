@@ -2,11 +2,22 @@ resource_utilization:
   outputs:
     dev:
       type: postgres
-      host: postgres
+      host: postgres        # use localhost when running dbt from your Mac
       port: 5432
       user: postgres
       password: postgres
       dbname: resource_utilization
-      schema: staging_silver
+      schema: dbt_dev        # base schema — only used if generate_schema_name macro is not present
       threads: 4
+
+    docker:
+      type: postgres
+      host: postgres         # use postgres (container name) when running dbt inside Docker
+      port: 5432
+      user: postgres
+      password: postgres
+      dbname: resource_utilization
+      schema: dbt_dev
+      threads: 4
+
   target: dev

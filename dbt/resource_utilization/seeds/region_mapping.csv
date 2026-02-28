@@ -1,4 +1,4 @@
-source_region,airport_code,aws_territory,govcloud,description
+source_region,airport_code,territory,govcloud,description
 us-east-1,IAD,US,false,US East (N. Virginia) - Primary US region with most services
 us-east-2,CMH,US,false,US East (Ohio) - Secondary US East region
 us-west-1,SFO,US,false,US West (N. California) - San Francisco Bay Area region

@@ -1,6 +1,6 @@
 """
-Airflow DAG: Silver Layer - Region Mapping (Manual Trigger)
-Load region_mapping.csv into silver layer using dbt seed
+Airflow DAG: Seed Layer - Region Mapping (Manual Trigger)
+Load region_mapping.csv into seed layer using dbt seed
 
 Trigger: Manual only (run when region_mapping.csv is updated)
 Schedule: None (on-demand)
@@ -24,14 +24,23 @@ default_args = {
 }
 
 dag = DAG(
-    'silver_layer_region_mapping',
+    'seed_layer_region_mapping',
     default_args=default_args,
-    description='Load region_mapping.csv to silver layer using dbt seed (Manual Trigger)',
+    description='Load region_mapping.csv to seed layer using dbt seed (Manual Trigger)',
     schedule_interval=None,  # Manual trigger only
     start_date=datetime(2026, 2, 17),
     catchup=False,
-    tags=['silver', 'dbt', 'region-mapping', 'manual'],
+    tags=['seed', 'dbt', 'region-mapping', 'manual'],
 )
+
+# ============================================================================
+# PATH CONSTANTS
+# ============================================================================
+
+DBT_PROJECT_DIR  = '/opt/dbt/resource_utilization'
+DBT_PROFILES_DIR = '/opt/dbt/resource_utilization'
+DB_CONN          = 'postgresql://postgres:postgres@postgres/resource_utilization'
+SEED_TABLE       = 'dbt_dev_seeds.region_mapping'
 
 # ============================================================================
 # DAG TASKS
@@ -39,17 +48,17 @@ dag = DAG(
 
 check_seed_file = BashOperator(
     task_id='check_seed_file',
-    bash_command="""
+    bash_command=f"""
         echo "🔍 Checking region_mapping.csv seed file..."
         echo ""
-        if [ -f /opt/dbt/my_project/seeds/region_mapping.csv ]; then
+        if [ -f {DBT_PROJECT_DIR}/seeds/region_mapping.csv ]; then
             echo "✅ region_mapping.csv found"
-            ls -lh /opt/dbt/my_project/seeds/region_mapping.csv
+            ls -lh {DBT_PROJECT_DIR}/seeds/region_mapping.csv
             echo ""
-            echo "📊 Row count:"
-            wc -l < /opt/dbt/my_project/seeds/region_mapping.csv
+            echo "📊 Row count (excluding header):"
+            tail -n +2 {DBT_PROJECT_DIR}/seeds/region_mapping.csv | wc -l
         else
-            echo "❌ region_mapping.csv NOT FOUND at /opt/dbt/my_project/seeds/"
+            echo "❌ region_mapping.csv NOT FOUND at {DBT_PROJECT_DIR}/seeds/"
             exit 1
         fi
         echo ""
@@ -60,34 +69,39 @@ check_seed_file = BashOperator(
 
 run_dbt_seed = BashOperator(
     task_id='run_dbt_seed',
-    bash_command="""
+    bash_command=f"""
         echo "🌱 Running dbt seed for region_mapping..."
         echo ""
-        cd /opt/dbt/my_project && \
+        cd {DBT_PROJECT_DIR} && \
         dbt seed \
             --select region_mapping \
-            --profiles-dir /opt/dbt/my_project \
-            --project-dir /opt/dbt/my_project \
-            --full-refresh
+            --profiles-dir {DBT_PROFILES_DIR} \
+            --project-dir {DBT_PROJECT_DIR} \
+            --full-refresh || exit 1
         echo ""
         echo "✅ dbt seed completed"
+        echo ""
+        echo "📊 Verifying seed table in database:"
+        psql {DB_CONN} -t -c "SELECT schemaname, tablename FROM pg_tables WHERE tablename = 'region_mapping';"
     """,
     dag=dag,
 )
 
 validate_seed = BashOperator(
     task_id='validate_seed',
-    bash_command="""
-        echo "🔍 Validating region_mapping table in silver layer..."
+    bash_command=f"""
+        echo "🔍 Validating region_mapping seed table..."
         echo ""
-        ROW_COUNT=$(psql postgresql://postgres:postgres@postgres/resource_utilization \
-            -t -c "SELECT COUNT(*) FROM staging_silver.region_mapping;")
-        echo "📊 Rows in staging_silver.region_mapping: $ROW_COUNT"
+
+        SEED_COUNT=$(psql {DB_CONN} \
+            -t -c "SELECT COUNT(*) FROM {SEED_TABLE};" | xargs)
+        echo "📊 Rows in {SEED_TABLE}: $SEED_COUNT"
+
         echo ""
-        if [ "$ROW_COUNT" -gt "0" ]; then
-            echo "✅ Validation passed - table has data"
+        if [ "$SEED_COUNT" -gt "0" ]; then
+            echo "✅ Validation passed - region_mapping has data"
         else
-            echo "❌ Validation failed - table is empty"
+            echo "❌ Validation failed - region_mapping is empty"
             exit 1
         fi
     """,

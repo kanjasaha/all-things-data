@@ -1,0 +1,35 @@
+version: 2
+
+seeds:
+  - name: region_mapping
+    description: " region reference data including territory, airport code, and GovCloud flag. Static seed — updated manually when  adds new regions."
+    config:
+      schema: seeds
+      column_types:
+        source_region: varchar
+        airport_code: varchar
+        territory: varchar
+        govcloud: boolean
+        description: varchar
+    columns:
+      - name: source_region
+        description: " region code (e.g. us-east-1). Primary key."
+        tests:
+          - unique
+          - not_null
+      - name: airport_code
+        description: "Three-letter airport code for the region's physical location"
+        tests:
+          - not_null
+      - name: territory
+        description: "Geographic territory: US, Europe, Asia Pacific, North America, Middle East, Africa, South America, China, US GovCloud"
+        tests:
+          - not_null
+      - name: govcloud
+        description: "True if this is an AWS GovCloud region requiring special access"
+        tests:
+          - not_null
+      - name: description
+        description: "Human readable region description"
+        tests:
+          - not_null

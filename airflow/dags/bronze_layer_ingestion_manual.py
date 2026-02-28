@@ -58,21 +58,19 @@ CONFIG_DIR = Path('/opt/airflow/config-files')
 
 def load_model_configuration(**context):
     """Load model configuration JSON to bronze table"""
-    
+
     filepath = CONFIG_DIR / 'model_configuration.json'
-    
+
     print(f"📂 Reading file: {filepath}")
-    
-    # Read JSON
+
     with open(filepath, 'r') as f:
         data = json.load(f)
-    
+
     models = data.get('models', [])
     snapshot_date = datetime.now().date()
-    
+
     print(f"📊 Found {len(models)} models in JSON")
-    
-    # Prepare records
+
     records = []
     for model in models:
         record = (
@@ -100,12 +98,11 @@ def load_model_configuration(**context):
             filepath.name
         )
         records.append(record)
-    
-    # Insert to database
+
     print(f"💾 Connecting to database...")
     conn = psycopg2.connect(**DB_CONFIG)
     cursor = conn.cursor()
-    
+
     insert_query = """
         INSERT INTO raw_bronze.config_model_dimensions (
             publisher_name, model_display_name, model_resource_name,
@@ -118,38 +115,34 @@ def load_model_configuration(**context):
         ) VALUES %s
         ON CONFLICT (model_variant, snapshot_date) DO NOTHING
     """
-    
+
     execute_values(cursor, insert_query, records)
     inserted = cursor.rowcount
     conn.commit()
     cursor.close()
     conn.close()
-    
+
     print(f"✅ Inserted {inserted} model configuration records")
-    
-    # Store count in XCom for downstream tasks
     context['task_instance'].xcom_push(key='model_config_count', value=inserted)
-    
+
     return inserted
 
 
 def load_model_region_availability(**context):
     """Load model region availability JSON to bronze table"""
-    
+
     filepath = CONFIG_DIR / 'model_region_availability.json'
-    
+
     print(f"📂 Reading file: {filepath}")
-    
-    # Read JSON
+
     with open(filepath, 'r') as f:
         data = json.load(f)
-    
+
     mappings = data.get('model_region_availability', [])
     snapshot_date = datetime.now().date()
-    
+
     print(f"📊 Found {len(mappings)} region mappings in JSON")
-    
-    # Prepare records
+
     records = []
     for mapping in mappings:
         record = (
@@ -161,12 +154,11 @@ def load_model_region_availability(**context):
             filepath.name
         )
         records.append(record)
-    
-    # Insert to database
+
     print(f"💾 Connecting to database...")
     conn = psycopg2.connect(**DB_CONFIG)
     cursor = conn.cursor()
-    
+
     insert_query = """
         INSERT INTO raw_bronze.config_model_region_availability (
             model_variant, source_region, deployed_at,
@@ -174,87 +166,84 @@ def load_model_region_availability(**context):
         ) VALUES %s
         ON CONFLICT (model_variant, source_region, snapshot_date) DO NOTHING
     """
-    
+
     execute_values(cursor, insert_query, records)
     inserted = cursor.rowcount
     conn.commit()
     cursor.close()
     conn.close()
-    
+
     print(f"✅ Inserted {inserted} region availability records")
-    
-    # Store count in XCom
     context['task_instance'].xcom_push(key='region_availability_count', value=inserted)
-    
+
     return inserted
 
 
 def validate_bronze_data(**context):
     """Validate data quality in bronze layer"""
-    
+
     conn = psycopg2.connect(**DB_CONFIG)
     cursor = conn.cursor()
-    
+
     issues = []
-    
+
     # Check 1: All models have region availability
     cursor.execute("""
-        SELECT mc.model_variant
-        FROM raw_bronze.model_configuration mc
+        SELECT cmd.model_variant
+        FROM raw_bronze.config_model_dimensions cmd
         WHERE snapshot_date = CURRENT_DATE
           AND NOT EXISTS (
-              SELECT 1 
-              FROM raw_bronze.model_region_availability mra
-              WHERE mra.model_variant = mc.model_variant
+              SELECT 1
+              FROM raw_bronze.config_model_region_availability mra
+              WHERE mra.model_variant = cmd.model_variant
                 AND mra.snapshot_date = CURRENT_DATE
           )
     """)
-    
+
     orphan_models = cursor.fetchall()
     if orphan_models:
         issues.append(f"⚠️  {len(orphan_models)} models without region availability: {[m[0] for m in orphan_models]}")
-    
+
     # Check 2: Count records loaded today
     cursor.execute("""
-        SELECT COUNT(*) FROM raw_bronze.model_configuration 
+        SELECT COUNT(*) FROM raw_bronze.config_model_dimensions
         WHERE snapshot_date = CURRENT_DATE
     """)
     config_count = cursor.fetchone()[0]
-    
+
     cursor.execute("""
-        SELECT COUNT(*) FROM raw_bronze.model_region_availability 
+        SELECT COUNT(*) FROM raw_bronze.config_model_region_availability
         WHERE snapshot_date = CURRENT_DATE
     """)
     region_count = cursor.fetchone()[0]
-    
+
     # Check 3: Count total records (all time)
-    cursor.execute("SELECT COUNT(*) FROM raw_bronze.model_configuration")
+    cursor.execute("SELECT COUNT(*) FROM raw_bronze.config_model_dimensions")
     total_config = cursor.fetchone()[0]
-    
-    cursor.execute("SELECT COUNT(*) FROM raw_bronze.model_region_availability")
+
+    cursor.execute("SELECT COUNT(*) FROM raw_bronze.config_model_region_availability")
     total_region = cursor.fetchone()[0]
-    
+
     cursor.close()
     conn.close()
-    
-    # Report
-    print("="*70)
+
+    print("=" * 70)
     print("📊 Bronze Layer Validation")
-    print("="*70)
-    print(f"Model configurations loaded today: {config_count}")
-    print(f"Region availabilities loaded today: {region_count}")
+    print("=" * 70)
+    print(f"Model configurations loaded today:    {config_count}")
+    print(f"Region availabilities loaded today:   {region_count}")
     print(f"Total model configurations (all time): {total_config}")
     print(f"Total region availabilities (all time): {total_region}")
-    
+
     if issues:
         print("\n⚠️  Data Quality Issues:")
         for issue in issues:
             print(f"  {issue}")
     else:
         print("\n✅ All validation checks passed!")
-    
-    print("="*70)
-    
+
+    print("=" * 70)
+
     return len(issues) == 0
 
 

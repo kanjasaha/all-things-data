@@ -5,6 +5,10 @@ sources:
     schema: raw_bronze
     description: "Bronze layer — raw ingested data from source systems"
     tables:
+
+      # -------------------------------------------------------------------------
+      # Customer
+      # -------------------------------------------------------------------------
       - name: customer_details
         description: "Customer and account information from CRM systems"
         columns:
@@ -15,6 +19,9 @@ sources:
           - name: loaded_at
             description: "Timestamp when record was loaded into bronze"
 
+      # -------------------------------------------------------------------------
+      # Inference Usage
+      # -------------------------------------------------------------------------
       - name: inference_user_token_usage_open_source
         description: "Token usage events for open source model inference"
         columns:
@@ -31,6 +38,9 @@ sources:
           - name: loaded_at
             description: "Timestamp when record was loaded into bronze"
 
+      # -------------------------------------------------------------------------
+      # Resource & Infrastructure
+      # -------------------------------------------------------------------------
       - name: resource_model_utilization
         description: "Pod-level utilization snapshots"
         columns:
@@ -46,10 +56,94 @@ sources:
             description: "On-Demand Capacity Reservation ID"
           - name: loaded_at
             description: "Timestamp when record was loaded into bronze"
+
       - name: resource_model_instance_allocation
         description: "Daily instance allocation per model variant and region"
         columns:
           - name: model_variant
             description: "Model variant identifier"
+          - name: loaded_at
+            description: "Timestamp when record was loaded into bronze"
+
+      # -------------------------------------------------------------------------
+      # Model Configuration
+      # -------------------------------------------------------------------------
+      - name: config_model_dimensions
+        description: "Model configuration and capacity metrics loaded from JSON"
+        columns:
+          - name: model_variant
+            description: "Unique model variant identifier"
+          - name: snapshot_date
+            description: "Date this configuration snapshot was taken"
+          - name: loaded_at
+            description: "Timestamp when record was loaded into bronze"
+
+      - name: config_model_region_availability
+        description: "Model regional availability and deployment status"
+        columns:
+          - name: model_variant
+            description: "Model variant identifier"
+          - name: source_region
+            description: "AWS region where model is available"
+          - name: loaded_at
+            description: "Timestamp when record was loaded into bronze"
+
+      # -------------------------------------------------------------------------
+      # Quota & Rate Limits
+      # -------------------------------------------------------------------------
+      - name: quota_default_rate_limits
+        description: "Default RPM, TPM, TPD limits applied to all customers without adjustments"
+        columns:
+          - name: model_variant
+            description: "Model variant identifier"
+          - name: inference_scope
+            description: "Inference routing scope: global, regional, multi-region"
+          - name: source_region
+            description: "Region these limits apply to"
+          - name: snapshot_date
+            description: "Date this limit snapshot was taken"
+          - name: loaded_at
+            description: "Timestamp when record was loaded into bronze"
+
+      - name: quota_customer_rate_limit_adjustments
+        description: "Per-customer rate limit adjustments — overrides of default limits"
+        columns:
+          - name: account_id
+            description: "Customer account identifier"
+          - name: model_variant
+            description: "Model variant identifier"
+          - name: source_region
+            description: "Region these limits apply to"
+          - name: snapshot_date
+            description: "Date this adjustment snapshot was taken"
+          - name: loaded_at
+            description: "Timestamp when record was loaded into bronze"
+
+      # -------------------------------------------------------------------------
+      # Revenue
+      # -------------------------------------------------------------------------
+      - name: revenue_account_daily
+        description: "Daily revenue at account + model + region grain with token-level breakdown"
+        columns:
+          - name: account_id
+            description: "Customer account identifier"
+          - name: product_sku
+            description: "Product catalog ID"
+          - name: model_variant
+            description: "Model variant identifier"
+          - name: revenue_date
+            description: "Date revenue was recognised"
+          - name: loaded_at
+            description: "Timestamp when record was loaded into bronze"
+
+      - name: quota_customer_rate_limit_requests
+        description: "Customer requests to change rate limits — pending, approved, rejected, cancelled"
+        columns:
+          - name: account_id
+            description: "Customer account identifier"
+          - name: create_datetime
+            description: "When the request was created"
+          - name: status
+            description: "Request status: pending, approved, rejected, cancelled"
           - name: loaded_at
             description: "Timestamp when record was loaded into bronze"
